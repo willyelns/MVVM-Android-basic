@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@id/currentWeatherFragment"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:orientation="vertical"
+    tools:context=".ui.MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:theme="@style/ToolbarTheme" />
 
     <fragment
-        android:id="@+id/currentWeatherFragment"
-        android:name="com.raevix.forecastmvvm.ui.weather.current.CurrentWeatherFragment"
-        android:label="current_weather_fragment"
-        tools:layout="@layout/current_weather_fragment" />
-    <fragment
-        android:id="@+id/futureListWeatherFragment"
-        android:name="com.raevix.forecastmvvm.ui.weather.future.list.FutureListWeatherFragment"
-        android:label="future_list_weather_fragment"
-        tools:layout="@layout/future_list_weather_fragment" >
-        <action
-            android:id="@+id/actionDetail"
-            app:destination="@id/futureDetailWeatherFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/futureDetailWeatherFragment"
-        android:name="com.raevix.forecastmvvm.ui.weather.future.detail.FutureDetailWeatherFragment"
-        android:label="future_detail_weather_fragment"
-        tools:layout="@layout/future_detail_weather_fragment" >
-        <argument
-            android:name="dateString"
-            app:argType="string" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.raevix.forecastmvvm.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
-</navigation>
+        android:id="@+id/nav_host_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/mobile_navigation"
+        app:defaultNavHost="true" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav"/>
+
+</LinearLayout>
