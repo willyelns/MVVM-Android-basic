@@ -1,10 +1,13 @@
 package com.raevix.forecastmvvm.data
 
+import com.google.gson.Gson
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.raevix.forecastmvvm.data.response.CurrentWeatherResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,7 +18,7 @@ const val API_KEY = "f6019ac34f67e4871ee1f86b73848398"
 interface ApixuWeatherApiService {
 
     @GET("current")
-    fun getCurrentWeather(
+    fun getCurrentWeatherAsync(
         @Query("query") location: String,
         @Query("lang") languageCode: String = "en",
         @Query("units") units: String = "m"
@@ -23,11 +26,11 @@ interface ApixuWeatherApiService {
 
     companion object {
         operator fun invoke(): ApixuWeatherApiService {
-            val requestIntecerptor = Interceptor{ chain ->
+            val requestInterceptor = Interceptor{ chain ->
                 val url = chain.request()
                     .url()
                     .newBuilder()
-                    .addQueryParameter("key", API_KEY)
+                    .addQueryParameter("access_key", API_KEY)
                     .build()
                 val request = chain.request()
                     .newBuilder()
@@ -38,11 +41,16 @@ interface ApixuWeatherApiService {
             }
 
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(requestIntecerptor)
+                .addInterceptor(requestInterceptor)
                 .build()
 
             return Retrofit.Builder()
                 .client(okHttpClient)
+                .baseUrl("http://api.weatherstack.com/")
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ApixuWeatherApiService::class.java)
         }
     }
 }
