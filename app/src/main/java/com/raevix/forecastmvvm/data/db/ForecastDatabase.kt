@@ -14,7 +14,7 @@ import com.raevix.forecastmvvm.data.db.entity.CurrentWeatherEntry
 )
 @TypeConverters(Converters::class)
 abstract class ForecastDatabase: RoomDatabase() {
-    abstract fun CurrentWeatherDao(): CurrentWeatherDao
+    abstract fun currentWeatherDao(): CurrentWeatherDao
 
     companion object {
         @Volatile private var instance: ForecastDatabase? = null
