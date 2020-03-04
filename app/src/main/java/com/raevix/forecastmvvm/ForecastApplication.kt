@@ -1,6 +1,7 @@
 package com.raevix.forecastmvvm
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.raevix.forecastmvvm.data.ApixuWeatherApiService
 import com.raevix.forecastmvvm.data.db.ForecastDatabase
 import com.raevix.forecastmvvm.data.network.ConnectivityInterceptor
@@ -26,5 +27,10 @@ class ForecastApplication: Application(), KodeinAware {
         bind() from singleton { ApixuWeatherApiService(instance()) }
         bind<WeatherNetworkDataSource>() with singleton { WeatherNetworkDataSourceImpl(instance()) }
         bind<ForecastRepository>() with singleton { ForecastRepositoryImpl(instance(), instance()) }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        AndroidThreeTen.init(this)
     }
 }
