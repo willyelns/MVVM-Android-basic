@@ -1,9 +1,11 @@
 package com.raevix.forecastmvvm.data.network
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.raevix.forecastmvvm.data.ApixuWeatherApiService
 import com.raevix.forecastmvvm.data.network.response.CurrentWeatherResponse
+import com.raevix.forecastmvvm.internal.NoConnectivityException
 
 class WeatherNetworkDataSourceImpl(
     private val apixuWeatherApiService: ApixuWeatherApiService
@@ -16,10 +18,13 @@ class WeatherNetworkDataSourceImpl(
 
     override suspend fun fetchCurrentWeather(location: String, languageCode: String) {
         try {
-            val fetchedCurrentWeahter = apixuWeatherApiService
+            val fetchedCurrentWeather = apixuWeatherApiService
                 .getCurrentWeatherAsync(location, languageCode)
                 .await()
-            _downloadedCurrentWeather.postValue()
+            _downloadedCurrentWeather.postValue(fetchedCurrentWeather)
+        }
+        catch(e: NoConnectivityException) {
+            Log.e("Connectivity", "No internet connection", e)
         }
     }
 }
