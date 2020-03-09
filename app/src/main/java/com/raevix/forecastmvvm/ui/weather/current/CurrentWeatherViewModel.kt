@@ -9,6 +9,7 @@ class CurrentWeatherViewModel(
     private val forecastRepository: ForecastRepository
 ) : ViewModel() {
     private val unitSystem =  UnitSystem.METRIC // get from settings later
+
     val isMetric: Boolean
         get() = unitSystem == UnitSystem.METRIC
 
